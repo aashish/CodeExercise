@@ -13,4 +13,32 @@ class Piece
     end
     moves
   end
+
+  def path(from, to)
+    ans = compute(from, to)
+    ans = output(ans) << to.position
+  end
+
+  def compute(from, to)
+    # basically outputs the last node before it hits pos2
+    current = from # a Node
+    queue = [] # a queue of Nodes to evaluate
+    until possible_moves?(current).include?(to.position)
+      for possible_move in possible_moves?(current)
+        queue << Square.new(possible_move[0], possible_move[1], current)
+      end
+      current = queue[0]
+      queue = queue[1..-1]
+    end
+    current
+  end
+
+  def output(node) # determines the history of the node from compute
+    history = []
+    until node.nil?
+      history.insert(0, node.position)
+      node = node.previous
+    end
+    history
+  end
 end

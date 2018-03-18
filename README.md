@@ -46,3 +46,15 @@ Algebraic Notation Legend:
 1 a1 b1 c1 d1 -  -  -  - 1
   a  b  c  d  e  f  g  h  
 ```
+
+Code Exercise 2:
+================
+
+Building on the elements from Exercise 1: **Implement a “Target” mode with `--target parameter`**.
+
+- Randomly place 8 (opposing) pieces onto the board tiles.
+- Determine the physically most distant tile from Current position . Calculate and output the minimum set of moves which the given piece Type could take to the most distant tile given that:
+  - Opposing pieces do not move.
+  - Opposing pieces may be “captured” along the way by moving to the occupied tile.
+  - Capturing an opposing piece marks the end of a “move”.
+  - Provide test coverage.

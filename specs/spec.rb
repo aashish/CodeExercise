@@ -3,6 +3,7 @@ require_relative '../chess/piece'
 require_relative '../chess/queen'
 require_relative '../chess/knight'
 require_relative '../chess/rook'
+require_relative '../chess'
 
 describe 'Square' do
   let(:square1) { make_square 0, 0 }
@@ -38,29 +39,99 @@ describe 'Piece' do
 end
 
 describe 'Queen' do
+  before(:each) do
+    @queen = make_queen
+  end
+
   it 'finds possible valid moves' do
     from = make_square(3, 7)
-    queen = make_queen
-    expect(queen.possible_moves?(from)).to include([7, 3])
-    expect(queen.possible_moves?(from)).not_to include([7, 6])
+    expect(@queen.possible_moves?(from)).to include([7, 3])
+    expect(@queen.possible_moves?(from)).not_to include([7, 6])
+  end
+
+  describe 'computes from starting square to the destination square' do
+    before(:each) do
+      from = Square.new(3, 5)
+      to = Square.new(7, 7)
+      @route = @queen.path(from, to)
+    end
+
+    it 'should have valid moves' do
+      # [[3, 5], [5, 5], [7, 7]]
+      expect(@route[1]).to eq([5, 5])
+    end
+
+    it 'should have valid steps' do
+      expect(@route.count - 1).to eq 2
+    end
   end
 end
 
 describe 'Knight' do
+  before(:each) do
+    @knight = make_knight
+  end
+
   it 'finds possible valid moves' do
     from = make_square(1, 0)
-    knight = make_knight
-    expect(knight.possible_moves?(from)).to include([3, 1])
-    expect(knight.possible_moves?(from)).not_to include([7, 6])
+    expect(@knight.possible_moves?(from)).to include([3, 1])
+    expect(@knight.possible_moves?(from)).not_to include([7, 6])
+  end
+
+  describe 'computes from starting square to the destination square' do
+    before(:each) do
+      from = Square.new(3, 3)
+      to = Square.new(7, 7)
+      @route = @knight.path(from, to)
+    end
+
+    it 'should have valid moves' do
+      # [[3, 3], [4, 5], [5, 7], [6, 5], [7, 7]]
+      expect(@route[1]).to eq([4, 5])
+      expect(@route[2]).to eq([5, 7])
+      expect(@route[3]).to eq([6, 5])
+    end
+
+    it 'should have valid steps' do
+      expect(@route.count - 1).to eq 4
+    end
   end
 end
 
 describe 'Rook' do
+  before(:each) do
+    @rook = make_rook
+  end
+
   it 'finds possible valid moves' do
     from = make_square(3, 7)
-    rook = make_rook
-    expect(rook.possible_moves?(from)).to include([1, 7])
-    expect(rook.possible_moves?(from)).not_to include([7, 6])
+    expect(@rook.possible_moves?(from)).to include([1, 7])
+    expect(@rook.possible_moves?(from)).not_to include([7, 6])
+  end
+
+  describe 'computes from starting square to the destination square' do
+    before(:each) do
+      from = Square.new(1, 3)
+      to = Square.new(7, 7)
+      @route = @rook.path(from, to)
+    end
+
+    it 'should have valid moves' do
+      # [[3, 3], [4, 5], [5, 7], [6, 5], [7, 7]]
+      expect(@route[1]).to eq([7, 3])
+    end
+
+    it 'should have valid steps' do
+      expect(@route.count - 1).to eq 2
+    end
+  end
+end
+
+describe 'chess' do
+  it 'should have valid positions' do
+    chess = Chess.new('Knight', 'd3')
+    positions = chess.generate_random_opposing_pieces(8)
+    p positions
   end
 end
 
